@@ -1,0 +1,204 @@
+SASS is a preprocessor
+
+scss: has a syntax near to css
+sass : has a synatx near to python like identation
+
+if the name of scss file is prefixed with "-" it means the preprocessor will ignore it,because it's created just to import it
+
+**Import Syntax:
+ @use "path"
+
+variables in scss:
+
+$variableName:variablevalue
+***example: $headerColor:red;
+
+global variables are accessible in any class
+but local no
+
+*make a local variable global:
+example:
+.class1{
+  $local-variables:red !global;
+}
+
+importing variables from another file 
+
+you have to do this syntax:
+ @use "path" as *;
+
+
+***Parent and element nesting:
+
+before sass :
+
+
+
+.father {
+  color: "blue";
+}
+.father .son {
+  color: "white";
+  font-size: "30px";
+}
+.father .son .grand-child {
+  font-family: Arial, Helvetica, sans-serif;
+}/*# sourceMappingURL=main.css.map */
+
+
+
+with sass:
+
+
+
+.father{
+    color:"blue";
+    .son{
+        color:"white";
+        font-size:"30px";
+    .grand-child{
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    }
+}
+
+
+.box{
+  &red{
+   color:red; 
+}
+}
+
+this means 
+.box.red{
+color:red;   
+ }
+
+PSEUDO ELEMENTS :
+
+in SASS:
+.parent {
+    &:hover{
+        background-color: blue;
+    }
+}
+//this in css equals to 
+.parent:hover{
+  background-color:white:
+} 
+
+***********Property Declaration*****
+in sass
+.parent {
+    padding:{
+        top:10px
+    }
+    font:{
+      size: 30px;
+    }
+}
+in css:
+.parent {
+  padding-top: 10px;
+  font-size: 30px;
+}
+
+
+
+In sass:
+.main-Box{
+    font-size: 40px;
+    font-weight: 100;
+    transform: scale(1.5);
+}
+
+.test-Box{
+    @extend .main-Box;
+    padding: 10px;
+}
+
+
+In css:
+.main-Box, .test-Box {
+  font-size: 40px;
+  font-weight: 100;
+  transform: scale(1.5);
+}
+
+.test-Box {
+  padding: 10px;
+}
+
+////////Place Holder:
+in sass
+%main-Box{
+    font-size: 40px;
+    font-weight: 100;
+    transform: scale(1.5);
+}
+
+.test-Box{
+    @extend %main-Box;
+    padding: 10px;
+}
+
+
+in css:
+.test-Box {
+  font-size: 40px;
+  font-weight: 100;
+  transform: scale(1.5);
+}
+
+.test-Box {
+  padding: 10px;
+}
+
+control flow example in scss:
+$theme:dark;
+
+.box{
+    @if $theme== "light"{
+    
+      color:"black"
+    }@else{
+        color:"white"
+    }
+}
+
+another example or syntax of if
+
+ border-radius: if($rounded,60px,null);
+
+====> if rounded is true means border-radius is 60px if it's false it will not be compiled because it's equal to null
+
+/********* Interpolation *******************/ 
+example 
+$direction:"row"
+
+.add-#{$direction} =============> .add-row
+
+unique-id()=====>return a unique id 
+/***********Comments***********************/
+
+//this will comment will not be shown in your css file
+/*this comment will be shown in your css file but not in compressed mode */
+/*! this comment will be shown in your css file and in compressed mode*/
+
+/**************************Mixin and include************/
+
+
+SASS CODE:
+@mixin rectangle($dimension) {
+   border: #{$dimension} solid red;
+}
+$number:21;
+.add-#{$number}{
+  @include rectangle(#{$number}px)
+}
+
+
+CSS CODE:
+.add-21 {
+  border: 21px solid red;
+}
