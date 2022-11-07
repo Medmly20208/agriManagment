@@ -51,6 +51,7 @@ const navConfig = [
         children: [
           { title: 'courses', path: PATH_DASHBOARD.user.courses },
           { title: 'instructors', path: PATH_DASHBOARD.user.instructors },
+          { title: 'clients', path: PATH_DASHBOARD.user.clients },
           { title: 'cards', path: PATH_DASHBOARD.user.cards },
           { title: 'list', path: PATH_DASHBOARD.user.list },
           { title: 'create', path: PATH_DASHBOARD.user.new },
