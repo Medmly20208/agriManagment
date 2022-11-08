@@ -26,6 +26,7 @@ const courseRouter = require("./routes/csfcourses");
 const instructorRouter = require("./routes/csfinstructors");
 const csfclientRouter = require("./routes/csfclients");
 const csfsessions = require("./routes/csfsessions");
+const employeesRouter = require("./routes/employees");
 const mpmeconsultant = require("./routes/mpmeconsultants");
 const mpmejuridiqueDoc = require("./routes/mpmejuridiquedoc");
 const mpmetechniquedoc = require("./routes/mpmetechniquedoc");
@@ -33,6 +34,7 @@ const mpmebanqairedoc = require("./routes/mpmebanqairedoc");
 
 app.use("/csfcourses", courseRouter);
 app.use("/csfinstructors", instructorRouter);
+app.use("/employees", employeesRouter);
 app.use("/csfclients", csfclientRouter);
 app.use("/csfsessions", csfsessions);
 app.use("/mpmeconsultant", mpmeconsultant);

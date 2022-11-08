@@ -60,6 +60,7 @@ export const PATH_DASHBOARD = {
     courses: path(ROOTS_DASHBOARD, '/formation/courses'),
     instructors: path(ROOTS_DASHBOARD, '/formation/instructors'),
     clients: path(ROOTS_DASHBOARD, '/formation/clients'),
+    clientsId: (id) => path(ROOTS_DASHBOARD, `/formation/clients/${id}`),
     account: path(ROOTS_DASHBOARD, '/user/account'),
     edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),

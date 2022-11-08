@@ -106,6 +106,8 @@ export default function Clients() {
 
   const [searchType, setSearchType] = useState('');
 
+  const LinkToId = PATH_DASHBOARD.user.clientsId;
+
   // get all client list
   const getAllclients = () => {
     axios.get('http://localhost:5000/csfclients').then((res) => setClientsList(res.data));
@@ -196,14 +198,6 @@ export default function Clients() {
 
   const getLengthByStatus = (status) => clientsList.filter((item) => item.status === status).length;
 
-  const getTotalPriceByStatus = (status) =>
-    sumBy(
-      clientsList.filter((item) => item.status === status),
-      'totalPrice'
-    );
-
-  const getPercentByStatus = (status) => (getLengthByStatus(status) / clientsList.length) * 100;
-
   // get all matches
   const getAllMatches = (value) => {
     setFilterName(value);
@@ -233,7 +227,7 @@ export default function Clients() {
     });
   };
 
-  // edit Instructor
+  // update client
   const updateClient = (id, newClientData) => {
     console.log(id, newClientData);
     axios
@@ -336,10 +330,12 @@ export default function Clients() {
                   {clientsList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                     return (
                       <TableRow key={row._id}>
-                        <TableCell />
+                        <TableCell>
+                          <Iconify icon={'akar-icons:arrow-up-right'} onClick={() => navigate(LinkToId(row._id))} />
+                        </TableCell>
 
                         {clientAttributes.map((element, index) => {
-                          return <TableCell key={index}>{`${row[element]}`}</TableCell>;
+                          return <TableCell key={index}>{`${row[element] === null ? '' : row[element]}`}</TableCell>;
                         })}
                         <TableCell>
                           <Iconify

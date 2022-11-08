@@ -1,3 +1,32 @@
+/*   import React, { useEffect, useState } from 'react';
+
+// axios
+import axios from 'axios';
+
+// mui material
+import { Box } from '@mui/material';
+
+const Employees = (props) => {
+  const [EmployeesList, setEmployeesList] = useState([]);
+
+  const API_END_POINT = 'http://localhost:5000';
+
+  // get all employees by client id
+  const getAllEmployeesByClientId = () => {
+    axios.get(`${API_END_POINT}/employees/${props.clientId}`).then((result) => setEmployeesList(result.data));
+  };
+
+  useEffect(() => {
+    getAllEmployeesByClientId();
+  }, []);
+
+  console.log(EmployeesList);
+
+  return <Box>Employees {props.clientId}</Box>;
+};
+
+export default Employees; */
+
 import sumBy from 'lodash/sumBy';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -30,23 +59,21 @@ import {
 import axios from 'axios';
 
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../../routes/paths';
 // hooks
-import useTabs from '../../../../hooks/useTabs';
-import useSettings from '../../../../hooks/useSettings';
-import useTable, { getComparator, emptyRows } from '../../../../hooks/useTable';
+import useTabs from '../../../../../hooks/useTabs';
+import useSettings from '../../../../../hooks/useSettings';
+import useTable, { getComparator, emptyRows } from '../../../../../hooks/useTable';
 // _mock_
-import { _invoices } from '../../../../_mock';
+import { _invoices } from '../../../../../_mock';
 // components
-import Page from '../../../../components/Page';
-import Label from '../../../../components/Label';
-import Iconify from '../../../../components/Iconify';
-import Scrollbar from '../../../../components/Scrollbar';
-import HeaderBreadcrumbs from '../../../../components/HeaderBreadcrumbs';
-import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../../../components/table';
+import Page from '../../../../../components/Page';
+import Iconify from '../../../../../components/Iconify';
+import Scrollbar from '../../../../../components/Scrollbar';
+import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../../../../components/table';
 // sections
-import InvoiceAnalytic from '../../invoice/InvoiceAnalytic';
-import { InvoiceTableRow, InvoiceTableToolbar } from '../../invoice/list';
+import InvoiceAnalytic from '../../../invoice/InvoiceAnalytic';
+import { InvoiceTableRow, InvoiceTableToolbar } from '../../../invoice/list';
 
 // Add cousre Modal
 import Modal from './Modal';
@@ -56,37 +83,31 @@ import EditModal from './EditModal';
 
 // ----------------------------------------------------------------------
 
-const SERVICE_OPTIONS = [
-  'all',
-  'full stack development',
-  'backend development',
-  'ui design',
-  'ui/ux design',
-  'front end development',
-];
-
 const TABLE_HEAD = [
-  { id: 'Field', label: 'Field', align: 'left' },
-  { id: 'Sub-Field', label: 'Sub-Field', align: 'left' },
-  { id: 'Action', label: 'Action', align: 'left' },
+  { id: 'firstname', label: 'firstname', align: 'left' },
+  { id: 'lastname', label: 'lastname', align: 'left' },
+  { id: 'title', label: 'title', align: 'left' },
+  { id: 'action', label: 'action', align: 'left' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function Courses() {
-  const [coursesList, setCoursesList] = useState([]);
+export default function Employees(props) {
+  const [employeesList, setEmployeesList] = useState([]);
 
   const [open, setOpenModal] = useState(false);
 
   const [openEdit, setOpenEdit] = useState(false);
 
-  // get all courses list
-  const getAllCourses = () => {
-    axios.get('http://localhost:5000/csfcourses').then((res) => setCoursesList(res.data));
+  const API_END_POINT = 'http://localhost:5000';
+
+  // get all Employees list by client id
+  const getAllEmployees = () => {
+    axios.get(`${API_END_POINT}/employees/${props.clientId}`).then((res) => setEmployeesList(res.data));
   };
 
   useEffect(() => {
-    getAllCourses();
+    getAllEmployees();
   }, []);
 
   const theme = useTheme();
@@ -128,92 +149,50 @@ export default function Courses() {
 
   const { currentTab: filterStatus, onChangeTab: onFilterStatus } = useTabs('all');
 
-  const handleFilterName = (filterName) => {
-    setFilterName(filterName);
-    setPage(0);
-  };
-
-  const handleFilterService = (event) => {
-    setFilterService(event.target.value);
-  };
-
-  const handleDeleteRow = (id) => {
-    const deleteRow = coursesList.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-  };
-
   const handleDeleteRows = (selected) => {
-    const deleteRows = coursesList.filter((row) => !selected.includes(row.id));
+    const deleteRows = employeesList.filter((row) => !selected.includes(row.id));
     setSelected([]);
     setTableData(deleteRows);
-  };
-
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.invoice.edit(id));
-  };
-
-  const handleViewRow = (id) => {
-    navigate(PATH_DASHBOARD.invoice.view(id));
   };
 
   const denseHeight = dense ? 56 : 76;
 
   const isNotFound =
-    (!coursesList?.length && !!filterName) ||
-    (!coursesList?.length && !!filterStatus) ||
-    (!coursesList?.length && !!filterService) ||
-    (!coursesList?.length && !!filterEndDate) ||
-    (!coursesList?.length && !!filterStartDate);
+    (!employeesList?.length && !!filterName) ||
+    (!employeesList?.length && !!filterStatus) ||
+    (!employeesList?.length && !!filterService) ||
+    (!employeesList?.length && !!filterEndDate) ||
+    (!employeesList?.length && !!filterStartDate);
 
-  const getLengthByStatus = (status) => coursesList.filter((item) => item.status === status).length;
-
-  const getTotalPriceByStatus = (status) =>
-    sumBy(
-      coursesList.filter((item) => item.status === status),
-      'totalPrice'
-    );
-
-  const getPercentByStatus = (status) => (getLengthByStatus(status) / coursesList.length) * 100;
-
-  // get all matches
-  const getAllMatches = (value) => {
-    setFilterName(value);
-    if (value.trim().length === 0) {
-      getAllCourses();
-    } else {
-      axios.get(`http://localhost:5000/csfcourses/findAllMatchs/${value}`).then((res) => {
-        setCoursesList(res.data);
-      });
-    }
-  };
-
-  // add Course
-  const AddCourse = (field, subField) => {
+  // add Employee
+  const AddEmployee = (firstname, lastname, title, clientid) => {
     axios
-      .post('http://localhost:5000/csfcourses/add', {
-        name: field,
-        field: subField,
+      .post(`${API_END_POINT}/employees/add`, {
+        firstname,
+        lastname,
+        title,
+        clientid,
       })
       .then((res) => {
-        getAllCourses();
+        getAllEmployees();
       });
   };
-  // delete Course
+  // delete Employee
   const deleteCourse = (id) => {
-    axios.delete(`http://localhost:5000/csfcourses/${id}`).then((res) => {
-      getAllCourses();
+    axios.delete(`${API_END_POINT}/employees/${id}`).then((res) => {
+      getAllEmployees();
     });
   };
-  // edit course
-  const updateCourse = (id, editedName, editedField) => {
+  // edit Employee
+  const updateEmployee = (firstname, lastname, title, id) => {
     axios
-      .post(`http://localhost:5000/csfcourses/UpdateCourse/${id}`, {
-        name: editedName,
-        field: editedField,
+      .post(`${API_END_POINT}/employees/updateemployee/${id}`, {
+        firstname,
+        lastname,
+        title,
       })
       .then((res) => {
-        getAllCourses();
+        getAllEmployees();
       });
   };
 
@@ -240,28 +219,15 @@ export default function Courses() {
           startIcon={<Iconify icon={'eva:plus-fill'} />}
           sx={{ marginBottom: '30px' }}
         >
-          New Course
+          New Employee
         </Button>
-        <Modal open={open} handleClose={CloseModal} onAddCourse={AddCourse} />
 
-        <EditModal open={openEdit} handleClose={CloseEditModal} onAddCourse={updateCourse} id={editedId} />
+        <Modal open={open} handleClose={CloseModal} onAddEmployee={AddEmployee} />
+
+        <EditModal open={openEdit} handleClose={CloseEditModal} onUpdateourse={updateEmployee} id={editedId} />
 
         <Card sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '10px' }}>
           <Divider />
-          <TextField
-            fullWidth
-            value={filterName}
-            onChange={(event) => getAllMatches(event.target.value)}
-            placeholder="Search client or invoice number..."
-            sx={{ width: '80%', marginLeft: '10px' }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Iconify icon={'eva:search-fill'} sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-                </InputAdornment>
-              ),
-            }}
-          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
@@ -269,11 +235,11 @@ export default function Courses() {
                 <TableSelectedActions
                   dense={dense}
                   numSelected={selected.length}
-                  rowCount={coursesList?.length}
+                  rowCount={employeesList?.length}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      coursesList.map((row) => row.id)
+                      employeesList.map((row) => row.id)
                     )
                   }
                   actions={
@@ -293,24 +259,25 @@ export default function Courses() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={coursesList?.length}
+                  rowCount={employeesList?.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      coursesList.map((row) => row.id)
+                      employeesList.map((row) => row.id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {coursesList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                  {employeesList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                     return (
                       <TableRow key={row._id}>
                         <TableCell />
-                        <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.field}</TableCell>
+                        <TableCell>{row.firstname}</TableCell>
+                        <TableCell>{row.lastname}</TableCell>
+                        <TableCell>{row.title}</TableCell>
                         <TableCell>
                           <Iconify
                             icon={'ep:delete'}
@@ -327,19 +294,21 @@ export default function Courses() {
                     );
                   })}
 
-                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, coursesList?.length)} />
+                  <TableEmptyRows
+                    height={denseHeight}
+                    emptyRows={emptyRows(page, rowsPerPage, employeesList?.length)}
+                  />
 
                   <TableNoData id="check" isNotFound={isNotFound} />
                 </TableBody>
               </Table>
             </TableContainer>
           </Scrollbar>
-
           <Box sx={{ position: 'relative' }}>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={coursesList === undefined ? 0 : coursesList.length}
+              count={employeesList === undefined ? 0 : employeesList.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={onChangePage}

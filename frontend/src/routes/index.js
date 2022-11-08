@@ -88,8 +88,8 @@ export default function Router() {
             { element: <Navigate to="/dashboard/user/profile" replace />, index: true },
             { path: 'courses', element: <Courses /> },
             { path: 'instructors', element: <Instructors /> },
-
             { path: 'clients', element: <Clients /> },
+            { path: 'clients/:id', element: <ClientItem /> },
             { path: 'cards', element: <UserCards /> },
             { path: 'list', element: <UserList /> },
             { path: 'new', element: <UserCreate /> },
@@ -204,6 +204,7 @@ const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')
 const Courses = Loadable(lazy(() => import('../sections/@dashboard/Formation/Courses/index')));
 const Instructors = Loadable(lazy(() => import('../sections/@dashboard/Formation/Instructors/index')));
 const Clients = Loadable(lazy(() => import('../sections/@dashboard/Formation/Clients/index')));
+const ClientItem = Loadable(lazy(() => import('../sections/@dashboard/Formation/Clients/ClientItem/index')));
 
 // USER
 const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
