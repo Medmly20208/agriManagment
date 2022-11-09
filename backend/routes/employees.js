@@ -32,6 +32,10 @@ router.route("/updateemployee/:id").post((req, res) => {
     .then((employee) => {
       //change just the fields that exist in req.body
       for (let i of Object.keys(req.body)) {
+        if (req.body[i] === "") {
+          continue;
+        }
+
         employee[i] = req.body[i];
       }
 
